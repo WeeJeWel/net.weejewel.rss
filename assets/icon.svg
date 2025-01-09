@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="456px" height="456px" viewBox="0 0 456 456" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Artboard</title>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="rss-svgrepo-com" transform="translate(63.745, 63.382)" fill="#000000" fill-rule="nonzero">
+            <g id="Group">
+                <path d="M232.463,95.778 C170.7,34.015 88.521,-7.10542736e-15 1.065,-7.10542736e-15 L1.065,64.348 C71.333,64.348 137.353,91.669 186.963,141.279 C236.572,190.889 263.894,256.909 263.894,327.177 L328.242,327.177 C328.242,239.721 294.226,157.541 232.463,95.778 Z" id="Path"></path>
+                <path d="M0.398,108.891 L0.398,173.239 C85.279,173.239 154.336,242.295 154.336,327.178 L218.684,327.178 C218.684,206.814 120.762,108.891 0.398,108.891 Z" id="Path"></path>
+                <circle id="Oval" cx="46.088" cy="282.878" r="46.088"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

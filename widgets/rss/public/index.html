@@ -1,0 +1,203 @@
+<html>
+
+<head>
+  <style>
+    #wrap {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      margin: var(--homey-su-4);
+      padding-bottom: var(--homey-su-4);
+      border-bottom: 1px solid var(--homey-color-mono-300);
+    }
+
+    #header-image {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      margin-right: 12px;
+
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+
+      display: none;
+    }
+
+    #header-image.is-visible {
+      display: block;
+    }
+
+    #header-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--homey-color-mono-900);
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #items {
+      overflow-x: hidden;
+      overflow-y: scroll;
+      flex-grow: 1;
+      padding: var(--homey-su-4);
+      padding-top: 0;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+
+      height: 64px;
+      cursor: pointer;
+      box-sizing: content-box;
+
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--homey-color-mono-100);
+    }
+
+    .item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .item:after {
+      display: block;
+      content: "";
+      height: 1px;
+      background-color: var(--homey-color-mono-100);
+      margin: 12px 0;
+    }
+
+    .item>.image {
+      flex-shrink: 0;
+      width: 64px;
+      height: 64px;
+      border-radius: 5px;
+      margin-right: 16px;
+      background-color: var(--homey-color-mono-100);
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .item>.title {
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 21px;
+      color: var(--homey-color-mono-900);
+
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
+    /* .item>.preview {
+      position: absolute;
+      top: calc(var(--homey-su-2) + 20px + var(--homey-su-2));
+      left: calc(80px + var(--homey-su-3));
+      right: var(--homey-su-2);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--homey-color-mono-600);
+
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    } */
+  </style>
+</head>
+
+<body class="homey-widget-full">
+
+  <div id="wrap">
+    <div id="header">
+      <div id="header-image"></div>
+      <div id="header-title">&nbsp;</div>
+    </div>
+    <div id="items">
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    const $header = document.getElementById('header');
+    const $headerTitle = document.getElementById('header-title');
+    const $headerImage = document.getElementById('header-image');
+    const $items = document.getElementById('items');
+
+    function onHomeyReady(Homey) {
+      const { url } = Homey.getSettings();
+      Homey.api('GET', `/?url=${encodeURIComponent(url)}`)
+        .then(feed => {
+          if (feed.title) {
+            $headerTitle.innerText = feed.title;
+          }
+
+          if (feed.image) {
+            $headerImage.style.backgroundImage = `url(${feed.image})`;
+            $headerImage.classList.add('is-visible');
+          }
+
+          for (const item of Object.values(feed.items)) {
+            const $item = document.createElement('div');
+            $item.classList.add('item');
+            $item.addEventListener('click', () => {
+              Homey.popup(item.link);
+            });
+            $items.appendChild($item);
+
+            let image = item.image;
+            if (!image) {
+              // Try to find an image in the content
+              const $content = document.createElement('div');
+              $content.innerHTML = item.content;
+              console.log($content)
+
+              const $img = $content.querySelector('img');
+              if ($img) {
+                image = $img.src;
+              }
+            }
+
+            const $image = document.createElement('div');
+            $image.classList.add('image');
+            $image.style.backgroundImage = `url(${image})`;
+            $image.classList.toggle('is-visible', !!image);
+            $item.appendChild($image);
+
+            const $title = document.createElement('h2');
+            $title.classList.add('title');
+            $title.innerText = item.title;
+            $item.appendChild($title);
+
+            // const $preview = document.createElement('div');
+            // $preview.classList.add('preview');
+            // $preview.innerHTML = item.preview;
+            // $item.appendChild($preview);
+          }
+        })
+        .catch(console.error)
+        .finally(() => {
+          Homey.ready();
+        });
+    }
+  </script>
+</body>
+
+</html>
