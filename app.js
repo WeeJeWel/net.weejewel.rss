@@ -33,7 +33,7 @@ module.exports = class RSSApp extends Homey.App {
       try {
         result.image = await this.getWebsiteImage(feed.link);
       } catch (err) {
-        this.error(`Error Getting Manifest: ${err.message}`);
+        this.error(`Error Getting Website Image: ${err.message}`);
       }
 
       return result;
@@ -99,7 +99,8 @@ module.exports = class RSSApp extends Homey.App {
       }
     }
 
-    throw new Error('Image Not Found');
+    // Fallback to Google Favicon API
+    return `https://www.google.com/s2/favicons?domain=${siteUrl}&sz=${128}`;
   }
 
 };
