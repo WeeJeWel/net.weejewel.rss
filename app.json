@@ -29,6 +29,13 @@
   },
   "support": "mailto:emile@athom.nl",
   "source": "https://github.com/weejewel/net.weejewel.rss",
+  "contributors": {
+    "developers": [
+      {
+        "name": "Bas van der Ploeg"
+      }
+    ]
+  },
   "widgets": {
     "rss": {
       "name": {
