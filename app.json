@@ -53,6 +53,16 @@
           },
           "value": true,
           "required": false
+        },
+        {
+          "id": "height",
+          "type": "number",
+          "label": {
+            "en": "Height"
+          },
+          "value": 300,
+          "min": 100,
+          "max": 1000
         }
       ],
       "api": {

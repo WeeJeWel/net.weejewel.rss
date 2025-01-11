@@ -13,34 +13,32 @@ module.exports = class RSSApp extends Homey.App {
   }
 
   async getFeed({ url }) {
+    const feed = await this.parser.parseURL(url);
+
+    const result = {
+      title: feed.title,
+      image: feed.image
+        ? feed.image.url
+        : null,
+      items: feed.items.map(item => ({
+        title: item.title,
+        link: item.link,
+        date: new Date(item.isoDate),
+        preview: item.contentSnippet,
+        content: item.content,
+        image: item.enclosure
+          ? item.enclosure.url
+          : null,
+      })),
+    };
+
     try {
-      const feed = await this.parser.parseURL(url);
-
-      const result = {
-        title: feed.title,
-        items: feed.items.map(item => ({
-          title: item.title,
-          link: item.link,
-          date: new Date(item.isoDate),
-          preview: item.contentSnippet,
-          content: item.content,
-          image: item.enclosure
-            ? item.enclosure.url
-            : null,
-        })),
-      };
-
-      try {
-        result.image = await this.getWebsiteImage(feed.link);
-      } catch (err) {
-        this.error(`Error Getting Website Image: ${err.message}`);
-      }
-
-      return result;
+      result.image = result.image ?? await this.getWebsiteImage(feed.link);
     } catch (err) {
-      this.error(err);
-      throw err;
+      this.error(`Error Getting Website Image: ${err.message}`);
     }
+
+    return result;
   }
 
   async getWebsiteImage(siteUrl) {

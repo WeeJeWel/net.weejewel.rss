@@ -57,6 +57,11 @@
       overflow-y: scroll;
       flex-grow: 1;
       padding: var(--homey-su-4);
+
+      mask-image: -webkit-linear-gradient(top,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 1) 90%,
+          rgba(255, 255, 255, 0) 100%);
     }
 
     .item {
@@ -164,10 +169,15 @@
       const {
         url,
         header,
+        height,
       } = Homey.getSettings();
 
       if (header === false) {
         $header.classList.add('is-hidden');
+      }
+
+      if (height) {
+        Homey.setHeight(height);
       }
 
       function reload() {
@@ -233,7 +243,7 @@
       }
 
       reload();
-      setInterval(reload, 5000);
+      setInterval(reload, 1000 * 60 * 10); // Reload every 10 minutes
     }
   </script>
 </body>
