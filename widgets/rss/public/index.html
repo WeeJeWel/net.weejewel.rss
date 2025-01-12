@@ -176,10 +176,6 @@
         $header.classList.add('is-hidden');
       }
 
-      if (height) {
-        Homey.setHeight(height);
-      }
-
       function reload() {
         Promise.resolve().then(async () => {
           const feed = await Homey.api('GET', `/?url=${encodeURIComponent(url)}`)
@@ -238,7 +234,9 @@
             $error.innerText = err.message;
           })
           .finally(() => {
-            Homey.ready();
+            Homey.ready({
+              height,
+            });
           });
       }
 
